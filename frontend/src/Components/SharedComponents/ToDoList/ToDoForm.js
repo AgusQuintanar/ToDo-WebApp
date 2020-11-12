@@ -18,6 +18,7 @@ export default class ToDoForm extends React.Component {
 			id: shortid.generate(),
 			text: this.state.text,
 			complete: false,
+            favorite: false
 		});
 		this.setState({
 			text: "",

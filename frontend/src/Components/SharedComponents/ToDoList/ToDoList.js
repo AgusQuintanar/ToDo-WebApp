@@ -4,27 +4,43 @@ import ToDo from "./ToDoItem";
 
 export default class ToDoList extends React.Component {
 	state = {
-        todos: [],
+        toDos: [],
         showCompletedTasks: false
 	};
 
-	addToDo = (todo) => {
+	addToDo = (toDo) => {
 		this.setState((state) => ({
-			todos: [todo, ...state.todos],
+			toDos: [toDo, ...state.toDos],
 		}));
 	};
 
 	toggleComplete = (id) => {
 		this.setState((state) => ({
-			todos: state.todos.map((todo) => {
-				if (todo.id === id) {
+			toDos: state.toDos.map((toDo) => {
+				if (toDo.id === id) {
 					// suppose to update
 					return {
-						...todo,
-						complete: !todo.complete,
+						...toDo,
+						complete: !toDo.complete,
 					};
 				} else {
-					return todo;
+					return toDo;
+				}
+			}),
+		}));
+    };
+
+    toggleFavorite = (id) => {
+		this.setState((state) => ({
+			toDos: state.toDos.map((toDo) => {
+				if (toDo.id === id) {
+					// suppose to update
+					return {
+						...toDo,
+						favorite: !toDo.favorite,
+					};
+				} else {
+					return toDo;
 				}
 			}),
 		}));
@@ -38,42 +54,42 @@ export default class ToDoList extends React.Component {
 
 	handleDeleteToDo = (id) => {
 		this.setState((state) => ({
-			todos: state.todos.filter((todo) => todo.id !== id),
+			toDos: state.toDos.filter((toDo) => toDo.id !== id),
 		}));
 	};
 
 
 	render() {
-        let remainingTasks = this.state.todos.filter((todo) => !todo.complete);
-        let completedTaks = this.state.todos.filter((todo) => todo.complete);
+        let remainingTasks = this.state.toDos.filter((toDo) => !toDo.complete);
+        let completedTaks = this.state.toDos.filter((toDo) => toDo.complete);
 
 		
-	
-
 		return (
 			<div>
                 <ToDoForm onSubmit={this.addToDo} />
                 
                 <div>
                     <label> Remaining Tasks ({remainingTasks.length}) </label>
-                    {remainingTasks.map((todo) => (
+                    {remainingTasks.map((toDo) => (
 					<ToDo
-						key={todo.id}
-						toggleComplete={() => this.toggleComplete(todo.id)}
-						onDelete={() => this.handleDeleteToDo(todo.id)}
-						todo={todo}
+						key={toDo.id}
+						toggleComplete={() => this.toggleComplete(toDo.id)}
+                        toggleFavorite={() => this.toggleFavorite(toDo.id)}
+						onDelete={() => this.handleDeleteToDo(toDo.id)}
+						toDo={toDo}
 					/>
                 ))}
                 </div>
 
                 {this.state.showCompletedTasks ? <div>
                     <label> Completed Tasks ({completedTaks.length}) </label>
-                    {completedTaks.map((todo) => (
+                    {completedTaks.map((toDo) => (
 					<ToDo
-						key={todo.id}
-						toggleComplete={() => this.toggleComplete(todo.id)}
-						onDelete={() => this.handleDeleteToDo(todo.id)}
-						todo={todo}
+						key={toDo.id}
+						toggleComplete={() => this.toggleComplete(toDo.id)}
+                        toggleFavorite={() => this.toggleFavorite(toDo.id)}
+						onDelete={() => this.handleDeleteToDo(toDo.id)}
+						toDo={toDo}
 					/>
                 ))}
                 </div> : null}
