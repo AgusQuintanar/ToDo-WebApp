@@ -62,18 +62,26 @@ export default class ToDoList extends React.Component {
 		let remainingTasks = this.state.toDos.filter(
 			(toDo) =>
 				!toDo.completed &&
-				(toDo.important === this.props.isImportant ||
-					toDo.myDay === this.props.isMyDay ||
-					toDo.planned === this.props.isPlanned ||
-					this.props.showAllTasks)
+				(
+					(
+						(toDo.important === this.props.isImportant && toDo.important) ||
+						(toDo.myDay === this.props.isMyDay && toDo.myDay) ||
+						(toDo.planned === this.props.isPlanned && toDo.planned)
+					)
+
+				||	this.props.showAllTasks)
 		);
 		let completedTaks = this.state.toDos.filter(
 			(toDo) =>
-				toDo.completed &&
-				(toDo.important === this.props.isImportant ||
-					toDo.myDay === this.props.isMyDay ||
-					toDo.planned === this.props.isPlanned ||
-					this.props.showAllTasks)
+			toDo.completed &&
+			(
+				(
+					(toDo.important === this.props.isImportant && toDo.important) ||
+					(toDo.myDay === this.props.isMyDay && toDo.myDay) ||
+					(toDo.planned === this.props.isPlanned && toDo.planned)
+				)
+
+			||	this.props.showAllTasks)
 		);
 
 		return (
