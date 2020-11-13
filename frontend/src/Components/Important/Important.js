@@ -1,11 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
+import ToDoList from "../SharedComponents/ToDoList/ToDoList";
 
-export default class Important extends Component {
-    render() {
-        return (
+export default class Important extends React.Component {
+	render() {
+		return (
             <div>
-
-            </div>    
-        );
-    }
+                <ToDoList 
+                    isImportant={true}
+                    isMyDay={false}
+                    isPlanned={false}
+                />
+			</div>
+		);
+	}
 }

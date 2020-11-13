@@ -17,8 +17,12 @@ export default class ToDoForm extends React.Component {
 		this.props.onSubmit({
 			id: shortid.generate(),
 			text: this.state.text,
-			complete: false,
-            favorite: false
+			completed: false,
+			important: this.props.isImportant,
+			myDay: this.props.isMyDay,
+			planned: this.props.isPlanned,
+			datePlanned: this.props.isPlanned ? Date() : null,
+			repetition: []
 		});
 		this.setState({
 			text: "",
