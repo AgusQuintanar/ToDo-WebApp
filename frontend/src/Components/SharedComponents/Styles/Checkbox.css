@@ -1,86 +1,113 @@
-.cb > label {
-	display: inline-block;
-	color: rgb(240, 111, 111);
+.cbx {
+	-webkit-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
 	cursor: pointer;
-	position: relative;
 }
-.cb > label span {
+.cbx span {
 	display: inline-block;
+	vertical-align: middle;
+	transform: translate3d(0, 0, 0);
+}
+.cbx span:first-child {
 	position: relative;
-	background-color: transparent;
-	width: 25px;
-	height: 25px;
-	transform-origin: center;
-	border: 2px solid rgb(167, 59, 59);
+	width: 24px;
+	height: 24px;
 	border-radius: 50%;
-	vertical-align: -6px;
-	margin-right: 10px;
-	transition: background-color 150ms 200ms,
-		transform 350ms cubic-bezier(0.78, -1.22, 0.17, 1.89);
+	transform: scale(1);
+	vertical-align: middle;
+	border: 1px solid #b9b8c3;
+	transition: all 0.2s ease;
 }
-.cb > label span:before {
-	content: "";
-	width: 0px;
-	height: 2px;
-	border-radius: 2px;
-	background: rgb(182, 92, 92);
+.cbx span:first-child svg {
 	position: absolute;
-	transform: rotate(45deg);
-	top: 13px;
-	left: 9px;
-	transition: width 50ms ease 50ms;
-	transform-origin: 0% 0%;
+	z-index: 1;
+	top: 8px;
+	left: 6px;
+	fill: none;
+	stroke: white;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-dasharray: 16px;
+	stroke-dashoffset: 16px;
+	transition: all 0.3s ease;
+	transition-delay: 0.1s;
+	transform: translate3d(0, 0, 0);
 }
-.cb > label span:after {
+.cbx span:first-child:before {
 	content: "";
-	width: 0;
-	height: 2px;
-	border-radius: 2px;
-	background: rgb(211, 116, 116);
-	position: absolute;
-	transform: rotate(305deg);
-	top: 16px;
-	left: 10px;
-	transition: width 50ms ease;
-	transform-origin: 0% 0%;
+	width: 100%;
+	height: 100%;
+	background: #506eec;
+	display: block;
+	transform: scale(0);
+	opacity: 1;
+	border-radius: 50%;
+	transition-delay: 0.2s;
 }
-label:hover span:before {
-	width: 5px;
-	transition: width 100ms ease;
-}
-label:hover span:after {
-	width: 10px;
-	transition: width 150ms ease 100ms;
+.cbx span:last-child {
+	margin-left: 0px;
 }
 
-.cb > input[type="checkbox"] {
+.cbx:hover span:first-child {
+	border-color: #00818a
+}
+
+.inp-cbx:checked + .cbx span:first-child {
+	border-color: #00818a;
+	background: #00818a;
+	animation: check 0.6s ease;
+}
+.inp-cbx:checked + .cbx span:first-child svg {
+	stroke-dashoffset: 0;
+}
+.inp-cbx:checked + .cbx span:first-child:before {
+	transform: scale(2.2);
+	opacity: 0;
+	transition: all 0.6s ease;
+}
+.inp-cbx:checked + .cbx span:last-child {
+	color: #b9b8c3;
+	transition: all 0.3s ease;
+}
+.inp-cbx:checked + .cbx span:last-child:after {
+	transform: scaleX(1);
+	transition: all 0.3s ease;
+}
+
+@keyframes check {
+	50% {
+		transform: scale(1.2);
+	}
+}
+
+
+
+.hide-checkbox {
 	display: none;
 }
-.cb > input[type="checkbox"]:checked + label span {
-	background-color: #fff;
-	transform: scale(1);
+
+
+/* Star checkbox */
+
+.star-checkbox {
+	padding-top: .9vh;
+	float: right;
 }
-.cb > input[type="checkbox"]:checked + label span:after {
-	width: 10px;
-	background: #1790b5;
-	transition: width 150ms ease 100ms;
+
+.star-checkbox::before {
+	content: "\f005";
+	font-size: 1.25em;
+	font-family: "Font Awesome 5 Free";
+	color: #eae7af;
 }
-.cb > input[type="checkbox"]:checked + label span:before {
-	width: 5px;
-	background: #1790b5;
-	transition: width 150ms ease 100ms;
+
+.star-checkbox:hover {
+	font-size: 1.1em;
 }
-.cb > input[type="checkbox"]:checked + label:hover span {
-	background-color: #fff;
-	transform: scale(1);
-}
-.cb > input[type="checkbox"]:checked + label:hover span:after {
-	width: 10px;
-	background: #1790b5;
-	transition: width 150ms ease 100ms;
-}
-.cb > input[type="checkbox"]:checked + label:hover span:before {
-	width: 5px;
-	background: #1790b5;
-	transition: width 150ms ease 100ms;
+
+.hide-checkbox:checked + .star-checkbox:before {
+	font-weight: 900;
+	color: #eae7af;
 }

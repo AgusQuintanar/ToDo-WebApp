@@ -1,0 +1,73 @@
+.Task {
+    background-color: #414141;
+    margin: .75% 1.5%;
+    width: 97%;
+    display: grid;
+    grid-template-rows: minmax(4%, 4%);
+    height: 6vh;
+    border-radius: .5em;
+}
+
+.TaskCompletedCB {
+    grid-column: 1;
+    padding-top: 1vh;
+}
+
+.TaskText {
+    grid-column: 2 / 24;
+    grid-row: 1;
+    background-color: inherit;
+    height: 6vh;
+    color: white;
+    display: flex;
+    padding-top: 1.25vh;
+
+}
+
+TaskText > span {
+    float: left;
+}
+
+
+.TaskImportantCB {
+    grid-column: 24;
+}
+
+
+
+
+/* Delete Button */
+
+.TaskDelete {
+    grid-column: 25;
+    align-self: center;
+    padding-top: 6.25vh;
+}
+
+
+.TaskDelete > button {
+    border: none !important;
+    background-color: transparent;
+}
+
+.TaskDelete > button:hover {
+	background-color: transparent;
+	border: none !important;
+}
+
+.TaskDelete > button > i:hover {
+	color: #ee4540;
+    font-size: 160%;
+    outline: none !important;
+	border: 0px solid rgb(196, 196, 196);
+}
+
+.TaskDelete > button:active {
+    outline: none !important;
+	border: 0px solid rgb(196, 196, 196);
+}
+
+.TaskDelete > button > i {
+    font-size: 140%;
+    color: #ec625f;
+}

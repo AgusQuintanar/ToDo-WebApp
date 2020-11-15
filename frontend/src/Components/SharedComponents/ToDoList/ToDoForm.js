@@ -22,7 +22,7 @@ export default class ToDoForm extends React.Component {
 			myDay: this.props.isMyDay,
 			planned: this.props.isPlanned,
 			datePlanned: this.props.isPlanned ? Date() : null,
-			repetition: []
+			repetition: [],
 		});
 		this.setState({
 			text: "",
@@ -32,12 +32,18 @@ export default class ToDoForm extends React.Component {
 	render() {
 		return (
 			<form onSubmit={this.handleSubmit}>
-				<input
-					name="text"
-					value={this.state.text}
-					onChange={this.handleChange}
-					placeholder="Add a Task"
-				/>
+				<div className="TDFicon">
+					<i aria-hidden="true" className="fa fa-plus fa-fw"></i>
+				</div>
+				<div className="TDFinput">
+					<input
+						autocomplete="off"
+						name="text"
+						value={this.state.text}
+						onChange={this.handleChange}
+						placeholder="Add a Task"
+					/>
+				</div>
 			</form>
 		);
 	}

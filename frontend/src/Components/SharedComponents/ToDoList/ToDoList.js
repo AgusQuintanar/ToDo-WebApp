@@ -1,6 +1,8 @@
 import React from "react";
 import ToDoForm from "./ToDoForm";
-import ToDo from "./ToDoItem";
+import Task from "./Task";
+import "../Styles/Task.css";
+import "../Styles/ToDoList.css";
 
 export default class ToDoList extends React.Component {
 	state = {
@@ -62,61 +64,50 @@ export default class ToDoList extends React.Component {
 		let remainingTasks = this.state.toDos.filter(
 			(toDo) =>
 				!toDo.completed &&
-				(
-					(
-						(toDo.important === this.props.isImportant && toDo.important) ||
-						(toDo.myDay === this.props.isMyDay && toDo.myDay) ||
-						(toDo.planned === this.props.isPlanned && toDo.planned)
-					)
-
-				||	this.props.showAllTasks)
+				((toDo.important === this.props.isImportant &&
+					toDo.important) ||
+					(toDo.myDay === this.props.isMyDay && toDo.myDay) ||
+					(toDo.planned === this.props.isPlanned && toDo.planned) ||
+					this.props.showAllTasks)
 		);
 		let completedTaks = this.state.toDos.filter(
 			(toDo) =>
-			toDo.completed &&
-			(
-				(
-					(toDo.important === this.props.isImportant && toDo.important) ||
+				toDo.completed &&
+				((toDo.important === this.props.isImportant &&
+					toDo.important) ||
 					(toDo.myDay === this.props.isMyDay && toDo.myDay) ||
-					(toDo.planned === this.props.isPlanned && toDo.planned)
-				)
-
-			||	this.props.showAllTasks)
+					(toDo.planned === this.props.isPlanned && toDo.planned) ||
+					this.props.showAllTasks)
 		);
 
 		return (
-			<div>
-				<ToDoForm
-					onSubmit={this.addToDo}
-					isImportant={this.props.isImportant}
-					isMyDay={this.props.isMyDay}
-					isPlanned={this.props.isPlanned}
-				/>
-
-				<div>
-					<label> Remaining Tasks ({remainingTasks.length}) </label>
-					{remainingTasks.map((toDo) => (
-						<ToDo
-							key={toDo.id}
-							toggleComplete={() => this.toggleComplete(toDo.id)}
-							toggleImportant={() =>
-								this.toggleImportant(toDo.id)
-							}
-							onDelete={() => this.handleDeleteToDo(toDo.id)}
-							toDo={toDo}
-						/>
-					))}
+			<div className="ToDoList">
+				<div className="ToDoForm">
+					<ToDoForm
+						onSubmit={this.addToDo}
+						isImportant={this.props.isImportant}
+						isMyDay={this.props.isMyDay}
+						isPlanned={this.props.isPlanned}
+					/>
 				</div>
 
-				{this.state.showCompletedTasks ? (
+				<div className="controlPanel">
 					<div>
-						<label>
-							{"Completed Tasks ("}
-							{completedTaks.length}
-							{")"}
-						</label>
-						{completedTaks.map((toDo) => (
-							<ToDo
+						<button onClick={() => this.toggleShowCompletedTasks()}>
+							{this.state.showCompletedTasks ? "Hide" : "Show"}{" "}
+							Completed Tasks
+						</button>
+					</div>
+				</div>
+
+				<div className="tasks-wrapper">
+					<div>
+						<span className="spanRemaining">
+							{" "}
+							Remaining Tasks ({remainingTasks.length}){" "}
+						</span>
+						{remainingTasks.map((toDo) => (
+							<Task
 								key={toDo.id}
 								toggleComplete={() =>
 									this.toggleComplete(toDo.id)
@@ -129,13 +120,33 @@ export default class ToDoList extends React.Component {
 							/>
 						))}
 					</div>
-				) : null}
 
-				<div>
-					<button onClick={() => this.toggleShowCompletedTasks()}>
-						{this.state.showCompletedTasks ? "Hide" : "Show"}{" "}
-						Completed Tasks
-					</button>
+					<div>
+						{this.state.showCompletedTasks ? (
+							<div>
+								<span className="spanRemaining">
+									{"Completed Tasks ("}
+									{completedTaks.length}
+									{")"}
+								</span>
+								{completedTaks.map((toDo) => (
+									<Task
+										key={toDo.id}
+										toggleComplete={() =>
+											this.toggleComplete(toDo.id)
+										}
+										toggleImportant={() =>
+											this.toggleImportant(toDo.id)
+										}
+										onDelete={() =>
+											this.handleDeleteToDo(toDo.id)
+										}
+										toDo={toDo}
+									/>
+								))}
+							</div>
+						) : null}
+					</div>
 				</div>
 			</div>
 		);

@@ -1,5 +1,8 @@
 .App {
 	text-align: center;
+	display: grid;
+	grid-template-columns: minmax(20%, 20%);
+	background-color: #313131;
 }
 
 .App-logo {
@@ -36,3 +39,16 @@
 		transform: rotate(360deg);
 	}
 }
+
+.App > * {
+	grid-column: 2 / 6;
+	
+}
+
+.App > .navBar {
+	grid-column: 1;
+	
+}
+
+
+
