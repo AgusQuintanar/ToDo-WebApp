@@ -5,8 +5,8 @@ const cors = require("cors");
 const knex = require("knex");
 
 const getTasks = require("./controllers/getTasks");
-
-
+const addTask = require("./controllers/addTask");
+const removeTask = require("./controllers/removeTask");
 
 const app = express();
 
@@ -27,41 +27,25 @@ const db = knex({
 });
 
 //* --------- Controllers -----------
-app.get("/getTasks", (req, res) => {
+
+
+
+app.post("/getTasks", (req, res) => {
     getTasks.handleGetTasks(req, res, db);
 });
 
-// app.get("/registroGeneral", (req, res) => {
-//     registroGeneral.handleGetRG(req, res, db);
-// });
 
-
-// app.get("/expedienteMedico", (req, res) => {
-//     expedienteMedico.handleGetEM(req, res, db);
-// });
-
-// app.get("/hogarTemporal", (req, res) => {
-//     hogarTemporal.handleGetHT(req, res, db);
-// });
-
-// app.get("/adopcion", (req, res) => {
-//     adopcion.handleGetA(req, res, db);
-// });
-
-// app.post("/login", login.handleLogin(db, bcrypt));
-// app.post("/registro", registro.handleRegistro(db, bcrypt));
-// app.get("/usuarios", usuarios.handleUsuariosGet(db));
-// app.put("/cambiarCorreo", cambiarCorreo.handleCorreo(db));
-// app.put("/cambiarContrasena", cambiarContrasena.handleContrasena(db));
-
-// app.put("/subirImagenRegistro", subirImagen.handleImagenRegistro(db));
-// app.put("/subirImagenMedico", subirImagen.handleImagenMedico(db));
-// app.put("/subirImagenHogar", subirImagen.handleImagenHogar(db));
-// app.put("/subirImagenAdopcion", subirImagen.handleImagenAdopcion(db));
-// app.post("/eliminarUsuario", eliminarUsuario.handleEliminarUsuario(db));
-
-app.listen(3001, () => {
-    console.log("Running in port 3001");
+app.post("/addTask", (req, res) => {
+    addTask.handleAddTask(req, res, db);
 });
 
-// const sharp = require("sharp");
+
+app.post("/removeTask", (req, res) => {
+    removeTask.handleRemoveTask(req, res, db);
+});
+
+
+app.listen(3001, () => {
+    console.log("Running in port 3001.");
+});
+
