@@ -3,6 +3,7 @@ import ToDoForm from "./ToDoForm";
 import Task from "./Task";
 import "../Styles/Task.css";
 import "../Styles/ToDoList.css";
+import "../Styles/ToDoListHeader.css";
 
 export default class ToDoList extends React.Component {
 	state = {
@@ -91,7 +92,10 @@ export default class ToDoList extends React.Component {
 					/>
 				</div>
 
-				<div className="controlPanel">
+				<div className="toDoListHeader">
+					<div className="listName">
+						<span> {this.props.name} </span>
+					</div>
 					<div>
 						<button onClick={() => this.toggleShowCompletedTasks()}>
 							{this.state.showCompletedTasks ? "Hide" : "Show"}{" "}

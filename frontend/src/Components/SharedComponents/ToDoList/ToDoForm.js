@@ -22,7 +22,6 @@ export default class ToDoForm extends React.Component {
 			myDay: this.props.isMyDay,
 			planned: this.props.isPlanned,
 			datePlanned: this.props.isPlanned ? Date() : null,
-			repetition: [],
 		});
 		this.setState({
 			text: "",

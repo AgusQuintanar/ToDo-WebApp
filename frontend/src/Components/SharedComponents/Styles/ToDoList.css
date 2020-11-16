@@ -70,7 +70,7 @@
 } */
 
 
-.controlPanel {
+.toDoListHeader {
     grid-row: 1;
     background-color: inherit;
     height: 15vh;

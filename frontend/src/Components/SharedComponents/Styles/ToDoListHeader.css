@@ -1,0 +1,5 @@
+.toDoListHeader {
+    display: grid;
+    grid-template-columns: minmax(25%, 25%);
+    
+}
