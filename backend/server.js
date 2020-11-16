@@ -7,6 +7,10 @@ const knex = require("knex");
 const getTasks = require("./controllers/getTasks");
 const addTask = require("./controllers/addTask");
 const removeTask = require("./controllers/removeTask");
+const updateTask = require("./controllers/updateTask");
+const getLists = require("./controllers/getLists");
+const addList = require("./controllers/addList");
+const removeList = require("./controllers/removeList");
 
 const app = express();
 
@@ -34,15 +38,31 @@ app.post("/getTasks", (req, res) => {
     getTasks.handleGetTasks(req, res, db);
 });
 
-
 app.post("/addTask", (req, res) => {
     addTask.handleAddTask(req, res, db);
 });
 
-
 app.post("/removeTask", (req, res) => {
     removeTask.handleRemoveTask(req, res, db);
 });
+
+app.put("/updateTask", (req, res) => {
+    updateTask.handleUpdateTask(req, res, db);
+});
+
+app.post("/getLists", (req, res) => {
+    getLists.handleGetLists(req, res, db);
+});
+
+app.post("/addList", (req, res) => {
+    addList.handleAddList(req, res, db);
+});
+
+app.post("/removeList", (req, res) => {
+    removeList.handleRemoveList(req, res, db);
+});
+
+
 
 
 app.listen(3001, () => {

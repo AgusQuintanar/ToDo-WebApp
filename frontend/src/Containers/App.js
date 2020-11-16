@@ -8,6 +8,11 @@ import MenuBar from "../Components/SharedComponents/MenuBar/MenuBar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 class App extends React.Component {
+
+	state = {
+		idUser: 1
+	}
+
 	componentDidMount() {
 		document.title = "AlphaToDo";
 	}
@@ -36,25 +41,42 @@ class App extends React.Component {
 
 						<Route
 							path="/AlphaToDo/Tasks"
-							exact
-							component={Tasks}
+							render={(props) => (
+								<Tasks
+									{...props}
+									idUser={this.state.idUser}
+								/>
+							)}
 						/>
 
 						<Route
 							path="/AlphaToDo/MyDay"
-							exact
-							component={MyDay}
+							render={(props) => (
+								<MyDay
+									{...props}
+									idUser={this.state.idUser}
+								/>
+							)}
 						/>
+
 						<Route
 							path="/AlphaToDo/Planned"
-							exact
-							component={Planned}
+							render={(props) => (
+								<Planned
+									{...props}
+									idUser={this.state.idUser}
+								/>
+							)}
 						/>
 
 						<Route
 							path="/AlphaToDo/Important"
-							exact
-							component={Important}
+							render={(props) => (
+								<Important
+									{...props}
+									idUser={this.state.idUser}
+								/>
+							)}
 						/>
 
 
@@ -65,8 +87,8 @@ class App extends React.Component {
 								<div>
 									<div className="App-header">
 										<h1>
-											Pagina no
-											<p className="red">Disponible</p>
+											Website
+											<p className="red">Not Available</p>
 										</h1>
 									</div>
 								</div>
