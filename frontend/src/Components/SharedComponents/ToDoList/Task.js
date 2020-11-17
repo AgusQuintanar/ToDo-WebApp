@@ -29,7 +29,7 @@ export default class Task extends React.Component {
 		
 
 				<div className="TaskDelete">
-					<button onClick={this.props.onDelete}>
+					<button onClick={this.props.onDelete} id={"delB" + this.props.toDo.id}>
 						<i
 							className="fa fa-times-circle"
 							aria-hidden="true"
@@ -39,14 +39,14 @@ export default class Task extends React.Component {
 
 				<div className="TaskCompletedCB">
 					<input
+						id={"ccb" + this.props.toDo.id}
 						className="inp-cbx"
-						id="cbx"
 						type="checkbox"
 						style={{ display: "none" }}
 						checked={this.props.toDo.completed}
 						onChange={this.props.toggleComplete}
 					/>
-					<label className="cbx" htmlFor="cbx">
+					<label className="cbx" htmlFor={"ccb" + this.props.toDo.id}>
 						<span>
 							<svg width="12px" height="9px" viewBox="0 0 12 9">
 								<polyline points="1 5 4 8 11 1"></polyline>

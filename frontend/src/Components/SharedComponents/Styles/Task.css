@@ -48,6 +48,8 @@ TaskText > span {
 .TaskDelete > button {
     border: none !important;
     background-color: transparent;
+    cursor: pointer;
+
 }
 
 .TaskDelete > button:hover {

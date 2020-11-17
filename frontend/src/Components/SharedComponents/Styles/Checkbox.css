@@ -94,6 +94,7 @@
 .star-checkbox {
 	padding-top: .9vh;
 	float: right;
+	cursor: pointer;
 }
 
 .star-checkbox::before {
