@@ -13,6 +13,7 @@ export default class ToDoForm extends React.Component {
 	};
 
 	handleSubmit = (event) => {
+		console.log("holaaaaa");
 		if (this.state.text !== "")
 		event.preventDefault();
 		this.props.onSubmit({

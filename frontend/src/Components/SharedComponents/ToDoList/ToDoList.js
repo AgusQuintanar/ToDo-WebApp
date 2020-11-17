@@ -12,7 +12,12 @@ export default class ToDoList extends React.Component {
 	};
 
 	fetchData = () => {
-		if (!this.props.idUser || !this.props.idList || this.props.idUser.length === 0) return;
+		if (
+			!this.props.idUser ||
+			!this.props.idList ||
+			this.props.idUser.length === 0
+		)
+			return;
 		fetch("http://localhost:3001/getTasks", {
 			method: "post",
 			headers: { "Content-Type": "application/json" },
@@ -55,9 +60,14 @@ export default class ToDoList extends React.Component {
 		this.fetchData();
 	}
 
-
+	getFormattedDate = (date) => {
+		date = new Date(date);
+		return date.getFullYear()+ "-"+ parseInt(date.getMonth()+1) +"-"+date.getDate();
+	}
 
 	addToDo = (toDo) => {
+		console.log(toDo);
+		console.log(this.props.idUser);
 		if (!this.props.idUser || !this.props.idList || !toDo) return;
 		const newToDo = {
 			text: toDo.text,
@@ -65,11 +75,12 @@ export default class ToDoList extends React.Component {
 			important: toDo.important,
 			myDay: toDo.myDay,
 			planned: toDo.planned,
-			datePlanned: toDo.datePlanned,
+			datePlanned: toDo.planned ? this.getFormattedDate(toDo.datePlanned) : null,
 			description: toDo.description,
 			idList: this.props.idList,
 			idUser: this.props.idUser,
 		};
+		console.log(newToDo);
 		fetch("http://localhost:3001/addTask", {
 			method: "post",
 			headers: { "Content-Type": "application/json" },
@@ -127,8 +138,9 @@ export default class ToDoList extends React.Component {
 	};
 
 	render() {
-
-		console.log("idUser: "+this.props.idUser + " " + this.props.idUser.length);
+		console.log(
+			"idUser: " + this.props.idUser + " " + this.props.idUser.length
+		);
 
 		let remainingTasks = this.state.toDos
 			? this.state.toDos.filter(
