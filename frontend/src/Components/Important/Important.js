@@ -6,9 +6,11 @@ export default class Important extends React.Component {
 		return (
             <div>
                 <ToDoList 
-                    isImportant={true}
-                    isMyDay={false}
-                    isPlanned={false}
+                    isImportant={1}
+                    isMyDay={0}
+                    isPlanned={0}
+                    idList={1}
+                    idUser={this.props.idUser}
                 />
 			</div>
 		);

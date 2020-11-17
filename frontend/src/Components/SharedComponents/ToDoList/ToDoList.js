@@ -9,48 +9,132 @@ export default class ToDoList extends React.Component {
 	state = {
 		toDos: [],
 		showCompletedTasks: false,
+		fetchCounter: 0
 	};
 
+	fetchData = () => {
+		if (!this.props.idUser || !this.props.idList) return;
+		fetch("http://localhost:3001/getTasks", {
+			method: "post",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				idUser: this.props.idUser,
+				idList: this.props.idList,
+			}),
+		})
+			.then((response) => response.json())
+			.then((response) => {
+				let parsedResponse = [];
+				response.forEach((element) => {
+					let tempR = {
+						id: parseInt(element.idTask),
+						text: element.text,
+						completed: parseInt(element.completed),
+						important: parseInt(element.important),
+						myDay: parseInt(element.myDay),
+						planned: parseInt(element.planned),
+						datePlanned: element.datePlanned,
+						description: element.description,
+						idList: parseInt(element.idList),
+						idUser: parseInt(element.idUser),
+					};
+					parsedResponse.push(tempR);
+				});
+
+				this.setState({
+					toDos: parsedResponse,
+					fetchCounter: this.state.fetchCounter+1
+				});
+			})
+			.catch((err) => console.log(err));
+	};
+
+	componentDidMount() {
+		this.fetchData();
+	}
+
+	componentDidUpdate() {
+		if (this.state.fetchCounter < 100) {
+			this.fetchData();
+		}
+	}
+
+	handleFetchAddTodo = (toDo) => {
+		if (!this.props.idUser || !this.props.idList || !toDo) return;
+		const newToDo = {
+			text: toDo.text,
+			completed: toDo.completed,
+			important: toDo.important,
+			myDay: toDo.myDay,
+			planned: toDo.planned,
+			datePlanned: toDo.datePlanned,
+			description: toDo.description,
+			idList: this.props.idList,
+			idUser: this.props.idUser,
+		};
+		fetch("http://localhost:3001/addTask", {
+			method: "post",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(newToDo),
+		})
+		.then(this.setState({
+			fetchCounter: this.state.fetchCounter+1
+		}))
+		.catch((err) => console.log(err));
+	}
+
 	addToDo = (toDo) => {
-		this.setState((state) => ({
-			toDos: [toDo, ...state.toDos],
-		}));
+		this.setState({
+			fetchCounter: 0
+		});
+		this.handleFetchAddTodo(toDo);
+	};
+
+	toggleAttrTask = (id, attr) => {
+		fetch("http://localhost:3001/getTask", {
+			method: "post",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				idTask: id,
+			}),
+		})
+			.then((task) => task.json())
+			.then((task) => {
+				if (task) {
+					fetch("http://localhost:3001/updateTask", {
+						method: "put",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({
+							...task,
+							[attr]: task[attr] === "0" ? "1" : "0 ",
+						}),
+					})
+					.then(this.setState({
+						fetchCounter: this.state.fetchCounter+1
+					}));
+				}
+			})
+
+			.catch((err) => console.log(err));
 	};
 
 	toggleComplete = (id) => {
-		this.setState((state) => ({
-			toDos: state.toDos.map((toDo) => {
-				if (toDo.id === id) {
-					// suppose to update
-					return {
-						...toDo,
-						completed: !toDo.completed,
-					};
-				} else {
-					return toDo;
-				}
-			}),
-		}));
+		this.setState({
+			fetchCounter: 0
+		})
+		this.toggleAttrTask(id, "completed");
 	};
 
 	toggleImportant = (id) => {
-		this.setState((state) => ({
-			toDos: state.toDos.map((toDo) => {
-				if (toDo.id === id) {
-					// suppose to update
-					return {
-						...toDo,
-						important: !toDo.important,
-					};
-				} else {
-					return toDo;
-				}
-			}),
-		}));
+		this.setState({
+			fetchCounter: 0
+		})
+		this.toggleAttrTask(id, "important");
 	};
 
 	toggleShowCompletedTasks = () => {
 		this.setState({
+			fetchCounter: 0,
 			showCompletedTasks: !this.state.showCompletedTasks,
 		});
 	};
@@ -62,24 +146,32 @@ export default class ToDoList extends React.Component {
 	};
 
 	render() {
-		let remainingTasks = this.state.toDos.filter(
-			(toDo) =>
-				!toDo.completed &&
-				((toDo.important === this.props.isImportant &&
-					toDo.important) ||
-					(toDo.myDay === this.props.isMyDay && toDo.myDay) ||
-					(toDo.planned === this.props.isPlanned && toDo.planned) ||
-					this.props.showAllTasks)
-		);
-		let completedTaks = this.state.toDos.filter(
-			(toDo) =>
-				toDo.completed &&
-				((toDo.important === this.props.isImportant &&
-					toDo.important) ||
-					(toDo.myDay === this.props.isMyDay && toDo.myDay) ||
-					(toDo.planned === this.props.isPlanned && toDo.planned) ||
-					this.props.showAllTasks)
-		);
+		let remainingTasks = this.state.toDos
+			? this.state.toDos.filter(
+					(toDo) =>
+						toDo.completed === 0 &&
+						((toDo.important === this.props.isImportant &&
+							toDo.important === 1) ||
+							(toDo.myDay === this.props.isMyDay &&
+								toDo.myDay === 1) ||
+							(toDo.planned === this.props.isPlanned &&
+								toDo.planned === 1) ||
+							this.props.showAllTasks === 1)
+			  )
+			: null;
+
+		let completedTaks = this.state.toDos ? (
+			this.state.toDos.filter(
+				(toDo) =>
+					toDo.completed === 1 &&
+					((toDo.important === this.props.isImportant &&
+						toDo.important) ||
+						(toDo.myDay === this.props.isMyDay && toDo.myDay) ||
+						(toDo.planned === this.props.isPlanned &&
+							toDo.planned) ||
+						this.props.showAllTasks)
+			)
+		) : null;
 
 		return (
 			<div className="ToDoList">
@@ -110,19 +202,26 @@ export default class ToDoList extends React.Component {
 							{" "}
 							Remaining Tasks ({remainingTasks.length}){" "}
 						</span>
-						{remainingTasks.map((toDo) => (
-							<Task
-								key={toDo.id}
-								toggleComplete={() =>
-									this.toggleComplete(toDo.id)
-								}
-								toggleImportant={() =>
-									this.toggleImportant(toDo.id)
-								}
-								onDelete={() => this.handleDeleteToDo(toDo.id)}
-								toDo={toDo}
-							/>
-						))}
+						{remainingTasks.map((toDo) => {
+							if (toDo) {
+								return (
+									<Task
+										key={"taskU" + toDo.id}
+										toggleComplete={() =>
+											this.toggleComplete(toDo.id)
+										}
+										toggleImportant={() =>
+											this.toggleImportant(toDo.id)
+										}
+										onDelete={() =>
+											this.handleDeleteToDo(toDo.id)
+										}
+										toDo={toDo}
+									/>
+								);
+							}
+							return null;
+						})}
 					</div>
 
 					<div>
@@ -135,7 +234,7 @@ export default class ToDoList extends React.Component {
 								</span>
 								{completedTaks.map((toDo) => (
 									<Task
-										key={toDo.id}
+										key={"taskC" + toDo.id}
 										toggleComplete={() =>
 											this.toggleComplete(toDo.id)
 										}

@@ -5,6 +5,7 @@ const cors = require("cors");
 const knex = require("knex");
 
 const getTasks = require("./controllers/getTasks");
+const getTask = require("./controllers/getTask");
 const addTask = require("./controllers/addTask");
 const removeTask = require("./controllers/removeTask");
 const updateTask = require("./controllers/updateTask");
@@ -36,6 +37,10 @@ const db = knex({
 
 app.post("/getTasks", (req, res) => {
     getTasks.handleGetTasks(req, res, db);
+});
+
+app.post("/getTask", (req, res) => {
+    getTask.handleGetTask(req, res, db);
 });
 
 app.post("/addTask", (req, res) => {

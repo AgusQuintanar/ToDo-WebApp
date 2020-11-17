@@ -11,13 +11,13 @@ export default class Tasks extends React.Component {
 					rel="stylesheet"
 					href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
 					integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-					crossorigin="anonymous"
+					crossOrigin="anonymous"
 				/>
 				<link
 					rel="stylesheet"
 					href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
 					integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
-					crossorigin="anonymous"
+					crossOrigin="anonymous"
 				/>
 			
 				<div className="page-wrapper chiller-theme toggled">
@@ -25,7 +25,7 @@ export default class Tasks extends React.Component {
 					<nav id="sidebar" className="sidebar-wrapper">
 						<div className="sidebar-content">
 							<div className="sidebar-brand">
-								<a href="#"> Alpha To Do </a>
+								<a href="https://github.com/AgusQuintanar/ToDo-WebApp"> Alpha To Do </a>
                             </div>
                             
                             <MenuHeader 

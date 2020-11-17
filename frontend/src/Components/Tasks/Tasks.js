@@ -6,10 +6,12 @@ export default class Tasks extends React.Component {
 		return (
 			<div>
                 <ToDoList 
-                    isImportant={false}
-                    isMyDay={false}
-                    isPlanned={false}
-                    showAllTasks={true}
+                    isImportant={0}
+                    isMyDay={0}
+                    isPlanned={0}
+                    showAllTasks={1}
+                    idList={1}
+                    idUser={this.props.idUser}
                 />
 			</div>
 		);

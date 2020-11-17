@@ -6,9 +6,11 @@ export default class Planned extends React.Component {
 		return (
 			<div>
                 <ToDoList 
-                    isImportant={false}
-                    isMyDay={false}
-                    isPlanned={true}
+                    isImportant={0}
+                    isMyDay={0}
+					isPlanned={1}
+					idList={1}
+					idUser={this.props.idUser}
                 />
 			</div>
 		);

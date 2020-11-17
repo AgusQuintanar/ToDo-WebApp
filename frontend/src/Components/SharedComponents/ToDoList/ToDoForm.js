@@ -13,6 +13,7 @@ export default class ToDoForm extends React.Component {
 	};
 
 	handleSubmit = (event) => {
+		if (this.state.text !== "")
 		event.preventDefault();
 		this.props.onSubmit({
 			id: shortid.generate(),
@@ -36,7 +37,7 @@ export default class ToDoForm extends React.Component {
 				</div>
 				<div className="TDFinput">
 					<input
-						autocomplete="off"
+						autoComplete="off"
 						name="text"
 						value={this.state.text}
 						onChange={this.handleChange}
