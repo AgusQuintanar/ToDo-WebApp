@@ -12,7 +12,7 @@ export default class ToDoList extends React.Component {
 	};
 
 	fetchData = () => {
-		if (!this.props.idUser || !this.props.idList) return;
+		if (!this.props.idUser || !this.props.idList || this.props.idUser.length === 0) return;
 		fetch("http://localhost:3001/getTasks", {
 			method: "post",
 			headers: { "Content-Type": "application/json" },
@@ -54,6 +54,8 @@ export default class ToDoList extends React.Component {
 	componentDidUpdate() {
 		this.fetchData();
 	}
+
+
 
 	addToDo = (toDo) => {
 		if (!this.props.idUser || !this.props.idList || !toDo) return;
@@ -125,6 +127,9 @@ export default class ToDoList extends React.Component {
 	};
 
 	render() {
+
+		console.log("idUser: "+this.props.idUser + " " + this.props.idUser.length);
+
 		let remainingTasks = this.state.toDos
 			? this.state.toDos.filter(
 					(toDo) =>

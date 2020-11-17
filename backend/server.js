@@ -1,6 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const knex = require("knex");
 
@@ -12,6 +11,8 @@ const updateTask = require("./controllers/updateTask");
 const getLists = require("./controllers/getLists");
 const addList = require("./controllers/addList");
 const removeList = require("./controllers/removeList");
+const registerUser = require("./controllers/registerUser");
+const login = require("./controllers/login");
 
 const app = express();
 
@@ -65,6 +66,14 @@ app.post("/addList", (req, res) => {
 
 app.post("/removeList", (req, res) => {
     removeList.handleRemoveList(req, res, db);
+});
+
+app.post("/registerUser", (req, res) => {
+    registerUser.handleRegisterUser(req, res, db);
+});
+
+app.post("/login", (req, res) => {
+    login.handleLogin(req, res, db);
 });
 
 

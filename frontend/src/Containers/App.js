@@ -5,13 +5,26 @@ import MyDay from "../Components/MyDay/MyDay";
 import Important from "../Components/Important/Important";
 import Planned from "../Components/Planned/Planned";
 import MenuBar from "../Components/SharedComponents/MenuBar/MenuBar";
+import Login from "../Components/Login/Login";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import auth from "../Components/Login/Auth";
 
+const initialState = {
+	signIn: auth.isAuthenticated(),
+	idUser: "",
+};
 class App extends React.Component {
-
-	state = {
-		idUser: 1
+	constructor(props) {
+		super(props);
+		this.state = initialState;
 	}
+
+	routeChange = (idUser) => {
+		this.setState({
+			signIn: auth.isAuthenticated(),
+			idUser: idUser,
+		});
+	};
 
 	componentDidMount() {
 		document.title = "AlphaToDo";
@@ -20,42 +33,31 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="App">
-
-
 				<Router>
 					{/* <Route path="/" render={() => <MenuBar />} /> */}
 
 					<Route path="/AlphaToDo" render={() => <MenuBar />} />
 
 					<Switch>
-						{/*
 						<Route
 							exact
 							path="/"
-							render={() => (
-								<Login cambioRuta={this.cambioRuta} />
+							render={(routeProps) => (
+								<Login routeChange={this.routeChange} {...routeProps}/>
 							)}
 						/>
-
-						<Route exact path="/Registro" component={Registro} /> */}
 
 						<Route
 							path="/AlphaToDo/Tasks"
 							render={(props) => (
-								<Tasks
-									{...props}
-									idUser={this.state.idUser}
-								/>
+								<Tasks {...props} idUser={this.state.idUser} />
 							)}
 						/>
 
 						<Route
 							path="/AlphaToDo/MyDay"
 							render={(props) => (
-								<MyDay
-									{...props}
-									idUser={this.state.idUser}
-								/>
+								<MyDay {...props} idUser={this.state.idUser} />
 							)}
 						/>
 
@@ -78,7 +80,6 @@ class App extends React.Component {
 								/>
 							)}
 						/>
-
 
 						{/* Primer Render de la app */}
 						<Route
