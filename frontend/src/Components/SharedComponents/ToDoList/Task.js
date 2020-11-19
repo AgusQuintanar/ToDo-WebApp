@@ -7,29 +7,34 @@ export default class Task extends React.Component {
 		return (
 			<div className="Task">
 				<div
-					className="TaskText"
+					className="TaskWrapper"
 					style={{
 						textDecoration: this.props.toDo.completed
 							? "line-through"
 							: "",
 					}}
 				>
-					<span>{this.props.toDo.text}</span>
+					<div className="TaskText">
+						<span>{this.props.toDo.text}</span>
+					</div>
+
+					{this.props.toDo.planned ? (
+						<div className="TaskDate">
+							<span>
+								{" "}
+								{new Date(
+									this.props.toDo.datePlanned
+								).toDateString()}{" "}
+							</span>
+						</div>
+					) : null}
 				</div>
 
-				{this.props.toDo.planned ? (
-					<div className="TaskDate">
-						{" "}
-						{new Date(
-							this.props.toDo.datePlanned
-						).toDateString()}{" "}
-					</div>
-				) : null}
-
-		
-
 				<div className="TaskDelete">
-					<button onClick={this.props.onDelete} id={"delB" + this.props.toDo.id}>
+					<button
+						onClick={this.props.onDelete}
+						id={"delB" + this.props.toDo.id}
+					>
 						<i
 							className="fa fa-times-circle"
 							aria-hidden="true"
