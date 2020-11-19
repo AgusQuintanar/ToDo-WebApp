@@ -8,7 +8,7 @@ import "../Styles/ToDoListHeader.css";
 export default class ToDoList extends React.Component {
 	state = {
 		toDos: [],
-		showCompletedTasks: false,
+		showCompletedTasks: true,
 	};
 
 	fetchData = () => {
@@ -56,18 +56,26 @@ export default class ToDoList extends React.Component {
 		this.fetchData();
 	}
 
-	componentDidUpdate() {
-		this.fetchData();
+	componentDidUpdate(prevProps) {
+		if (this.props.idUser !== prevProps.idUser) {
+			this.fetchData();
+		}
 	}
 
 	getFormattedDate = (date) => {
 		date = new Date(date);
-		return date.getFullYear()+ "-"+ parseInt(date.getMonth()+1) +"-"+date.getDate();
-	}
+		return (
+			date.getFullYear() +
+			"-" +
+			parseInt(date.getMonth() + 1) +
+			"-" +
+			date.getDate()
+		);
+	};
 
-	addToDo = (toDo) => {
+	addToDoRequest = (toDo) => {
 		console.log(toDo);
-		console.log(this.props.idUser);
+		console.log(this.state.toDos);
 		if (!this.props.idUser || !this.props.idList || !toDo) return;
 		const newToDo = {
 			text: toDo.text,
@@ -75,12 +83,13 @@ export default class ToDoList extends React.Component {
 			important: toDo.important,
 			myDay: toDo.myDay,
 			planned: toDo.planned,
-			datePlanned: toDo.planned ? this.getFormattedDate(toDo.datePlanned) : null,
+			datePlanned: toDo.planned
+				? this.getFormattedDate(toDo.datePlanned)
+				: null,
 			description: toDo.description,
 			idList: this.props.idList,
 			idUser: this.props.idUser,
 		};
-		console.log(newToDo);
 		fetch("http://localhost:3001/addTask", {
 			method: "post",
 			headers: { "Content-Type": "application/json" },
@@ -88,7 +97,7 @@ export default class ToDoList extends React.Component {
 		}).catch((err) => console.log(err));
 	};
 
-	toggleAttrTask = (id, attr) => {
+	toggleAttrTaskRequest = (id, attr) => {
 		fetch("http://localhost:3001/getTask", {
 			method: "post",
 			headers: { "Content-Type": "application/json" },
@@ -104,7 +113,7 @@ export default class ToDoList extends React.Component {
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({
 							...task,
-							[attr]: task[attr] === "0" ? "1" : "0 ",
+							[attr]: task[attr] === "0" ? "1" : "0",
 						}),
 					});
 				}
@@ -113,12 +122,61 @@ export default class ToDoList extends React.Component {
 			.catch((err) => console.log(err));
 	};
 
+	handleDeleteToDoRequest = (id) => {
+		fetch("http://localhost:3001/removeTask", {
+			method: "post",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				idTask: id,
+			}),
+		}).catch((err) => console.log(err));
+	};
+
+	addToDo = (toDo) => {
+		this.setState(
+			(state) => ({
+				toDos: [toDo, ...state.toDos],
+			}),
+			this.addToDoRequest(toDo)
+		);
+	};
+
 	toggleComplete = (id) => {
-		this.toggleAttrTask(id, "completed");
+		this.setState(
+			(state) => ({
+				toDos: state.toDos.map((toDo) => {
+					if (toDo.id === id) {
+						// suppose to update
+						return {
+							...toDo,
+							completed: toDo.completed ? 0 : 1,
+						};
+					} else {
+						return toDo;
+					}
+				}),
+			}),
+			this.toggleAttrTaskRequest(id, "completed")
+		);
 	};
 
 	toggleImportant = (id) => {
-		this.toggleAttrTask(id, "important");
+		this.setState(
+			(state) => ({
+				toDos: state.toDos.map((toDo) => {
+					if (toDo.id === id) {
+						// suppose to update
+						return {
+							...toDo,
+							important: toDo.important ? 0 : 1,
+						};
+					} else {
+						return toDo;
+					}
+				}),
+			}),
+			this.toggleAttrTaskRequest(id, "important")
+		);
 	};
 
 	toggleShowCompletedTasks = () => {
@@ -128,13 +186,12 @@ export default class ToDoList extends React.Component {
 	};
 
 	handleDeleteToDo = (id) => {
-		fetch("http://localhost:3001/removeTask", {
-			method: "post",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				idTask: id,
+		this.setState(
+			(state) => ({
+				toDos: state.toDos.filter((toDo) => toDo.id !== id),
 			}),
-		}).catch((err) => console.log(err));
+			this.handleDeleteToDoRequest(id)
+		);
 	};
 
 	render() {

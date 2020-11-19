@@ -21,13 +21,13 @@ class App extends React.Component {
 
 	routeChange = (idUser) => {
 		this.setState({
-			signIn: auth.isAuthenticated(),
 			idUser: idUser,
+			signIn: auth.isAuthenticated(),
 		});
 	};
 
 	componentDidMount() {
-		document.title = "AlphaToDo";
+		document.title = "Alpha To Do";
 	}
 
 	render() {

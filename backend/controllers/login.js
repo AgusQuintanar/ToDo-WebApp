@@ -8,7 +8,7 @@ const handleLogin = (req, res, db) => {
             if (password === user[0].password) {
                 return res.json(user[0].idUser);
             } else {
-                res.status(400).json(-1);
+                res.json(-1);
             }
 			
 		})

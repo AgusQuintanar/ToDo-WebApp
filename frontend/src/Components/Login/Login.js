@@ -8,6 +8,8 @@ import {
 	Input,
 	FormFeedback,
 } from "reactstrap";
+import { Alert } from "@material-ui/lab";
+import "./Styles/Login.css";
 
 import auth from "./Auth";
 
@@ -37,6 +39,8 @@ export default class Login extends React.Component {
 				fecha: false,
 				correoPerdido: false,
 			},
+			showSuccessAlert: false,
+			showFailAlert: false,
 		};
 		this.handleSubmitIS = this.handleSubmitIS.bind(this);
 		this.handleSubmitR = this.handleSubmitR.bind(this);
@@ -60,7 +64,7 @@ export default class Login extends React.Component {
 				this.state.contraseñaIS.length === 0)
 		) {
 			event.preventDefault();
-
+			this.toggleShowAlert("showSuccessAlert");
 			console.log("Se manejó con exito, no se envió");
 		} else {
 			console.log("Current State is: " + JSON.stringify(user));
@@ -100,6 +104,10 @@ export default class Login extends React.Component {
 						this.props.routeChange(userId);
 					});
 				}
+				else {
+					this.toggleShowAlert("showSuccessAlert");
+
+				}
 			})
 
 			.catch((err) => console.log(err));
@@ -120,6 +128,10 @@ export default class Login extends React.Component {
 						this.props.history.push("/AlphaToDo/MyDay");
 						this.props.routeChange(userId);
 					});
+				}
+				else {
+					this.toggleShowAlert("showSuccessAlert");
+
 				}
 			})
 
@@ -150,6 +162,7 @@ export default class Login extends React.Component {
 		) {
 			event.preventDefault();
 			console.log("Se manejó con exito, no se envió");
+			this.toggleShowAlert("showSuccessAlert");
 		} else {
 			console.log("Current State is: " + JSON.stringify(newUser));
 			this.handleRegister(newUser);
@@ -262,6 +275,12 @@ export default class Login extends React.Component {
 		return errors;
 	}
 
+	toggleShowAlert = (alertName) => {
+		this.setState({
+			[alertName]: !this.state[alertName],
+		});
+	};
+
 	render() {
 		const errors = this.validate(
 			this.state.correoIS,
@@ -275,257 +294,304 @@ export default class Login extends React.Component {
 		);
 
 		return (
-			<div className="container">
-				<h1 style={{ color: "white" }}>
-					Bienvenido a Águila A-Tareada!!
-				</h1>
-				<div className="row">
-					<div className="col-6">
-						<div className="row">
-							<div className="col-12">
-								<div className="jumbotron mt-3">
-									<h2>Inicia Sesión</h2>
-									<Form>
-										<FormGroup className="row">
-											<div className="col-12">
-												<Label htmlFor="email">
-													Correo Electrónico
-												</Label>
-												<Input
-													type="email"
-													required
-													className="form-control"
-													placeholder="Correo Electrónico"
-													name="correoIS"
-													value={this.state.correoIS}
-													valid={
-														errors.correoIS === ""
-													}
-													invalid={
-														errors.correoIS !== ""
-													}
-													id="correoIS"
-													onChange={
-														this.handleInputChange
-													}
-													onBlur={this.handleBlur(
-														"correoIS"
-													)}
-												/>
-												<FormFeedback>
-													{errors.correoIS}
-												</FormFeedback>
-											</div>
-										</FormGroup>
+			<div className="login">
+				{this.state.showSuccessAlert ? (
+					<Alert
+						className="alertLogin"
+						severity="error"
+						onClose={() => this.toggleShowAlert("showSuccessAlert")}
+					>
+						<strong>Error!</strong> Favor de verificar que los datos ingresados sean correctos.
+					</Alert>
+					
+				) : null}
+				<div className="loginHeader">
+					<h1 style={{ color: "white" }}>
+						Bienvenido a Águila A-Tareada!!
+					</h1> </div>
+				<div className="loginForms">
+					
+					<div className="row">
+						<div className="col-6">
+							<div className="row">
+								<div className="col-12">
+									<div className="jumbotron mt-3">
+										<h2>Inicia Sesión</h2>
+										<Form>
+											<FormGroup className="row">
+												<div className="col-12">
+													<Label htmlFor="email">
+														Correo Electrónico
+													</Label>
+													<Input
+														type="email"
+														required
+														className="form-control"
+														placeholder="Correo Electrónico"
+														name="correoIS"
+														value={
+															this.state.correoIS
+														}
+														valid={
+															errors.correoIS ===
+															""
+														}
+														invalid={
+															errors.correoIS !==
+															""
+														}
+														id="correoIS"
+														onChange={
+															this
+																.handleInputChange
+														}
+														onBlur={this.handleBlur(
+															"correoIS"
+														)}
+													/>
+													<FormFeedback>
+														{errors.correoIS}
+													</FormFeedback>
+												</div>
+											</FormGroup>
 
-										<FormGroup className="row">
-											<div className="col-12">
-												<Label htmlFor="pass">
-													Contraseña
-												</Label>
-												<Input
-													type="password"
-													required
-													className="form-control"
-													placeholder="Contraseña"
-													name="contraseñaIS"
-													value={
-														this.state.contraseñaIS
-													}
-													valid={
-														errors.contraseñaIS ===
-														""
-													}
-													invalid={
-														errors.contraseñaIS !==
-														""
-													}
-													id="contraseñaIS"
-													onChange={
-														this.handleInputChange
-													}
-													onBlur={this.handleBlur(
-														"contraseñaIS"
-													)}
-												/>
-												<FormFeedback>
-													{errors.contraseñaIS}
-												</FormFeedback>
+											<FormGroup className="row">
+												<div className="col-12">
+													<Label htmlFor="pass">
+														Contraseña
+													</Label>
+													<Input
+														type="password"
+														required
+														className="form-control"
+														placeholder="Contraseña"
+														name="contraseñaIS"
+														value={
+															this.state
+																.contraseñaIS
+														}
+														valid={
+															errors.contraseñaIS ===
+															""
+														}
+														invalid={
+															errors.contraseñaIS !==
+															""
+														}
+														id="contraseñaIS"
+														onChange={
+															this
+																.handleInputChange
+														}
+														onBlur={this.handleBlur(
+															"contraseñaIS"
+														)}
+													/>
+													<FormFeedback>
+														{errors.contraseñaIS}
+													</FormFeedback>
 
-												<small className="form-text text-muted">
-													Mínimo 8 caracteres
-												</small>
-											</div>
-										</FormGroup>
+													<small className="form-text text-muted">
+														Mínimo 8 caracteres
+													</small>
+												</div>
+											</FormGroup>
 
-										<FormGroup className="row">
-											<div className="col-12 text-center">
-												<div className="row justify-content-center">
-													<div className="col-12">
-														<Button
-															onClick={(event) =>
-																this.handleSubmitIS(
-																	event,
-																	errors
-																)
-															}
-															className="btn-lg btn-info btn-block"
-														>
-															Enviar
-														</Button>
+											<FormGroup className="row">
+												<div className="col-12 text-center">
+													<div className="row justify-content-center">
+														<div className="col-12">
+															<Button
+																onClick={(
+																	event
+																) =>
+																	this.handleSubmitIS(
+																		event,
+																		errors
+																	)
+																}
+																className="btn-lg btn-info btn-block"
+															>
+																Enviar
+															</Button>
+														</div>
 													</div>
 												</div>
-											</div>
-										</FormGroup>
-									</Form>
+											</FormGroup>
+										</Form>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div className="col-6">
-						<div className="jumbotron mt-3">
-							<h1>Registrate</h1>
-							<Form>
-								<h5 className="text-muted">
-									Crea una cuenta. Es grátis y solo toma un
-									minuto
-								</h5>
-								<FormGroup className="row">
-									<div className="col-md-6 col-sm-12 mb-3">
-										<label htmlFor="nombre">Nombre</label>
-										<Input
-											type="text"
-											required
-											className="form-control"
-											placeholder="Nombre"
-											name="nombre"
-											id="nombre"
-											valid={errors.nombre === ""}
-											invalid={errors.nombre !== ""}
-											value={this.state.nombre}
-											onChange={this.handleInputChange}
-											onBlur={this.handleBlur("nombre")}
-										/>
-										<FormFeedback>
-											{errors.nombre}
-										</FormFeedback>
+						<div className="col-6">
+							<div className="jumbotron mt-3">
+								<h1>Registrate</h1>
+								<Form>
+									<h5 className="text-muted">
+										Crea una cuenta. Es grátis y solo toma
+										un minuto
+									</h5>
+									<FormGroup className="row">
+										<div className="col-md-6 col-sm-12 mb-3">
+											<label htmlFor="nombre">
+												Nombre
+											</label>
+											<Input
+												type="text"
+												required
+												className="form-control"
+												placeholder="Nombre"
+												name="nombre"
+												id="nombre"
+												valid={errors.nombre === ""}
+												invalid={errors.nombre !== ""}
+												value={this.state.nombre}
+												onChange={
+													this.handleInputChange
+												}
+												onBlur={this.handleBlur(
+													"nombre"
+												)}
+											/>
+											<FormFeedback>
+												{errors.nombre}
+											</FormFeedback>
+										</div>
+										<div className="col-md-6 col-sm-12 mb-3">
+											<label htmlFor="apellido">
+												Apellido
+											</label>
+											<Input
+												type="apellido"
+												required
+												className="form-control"
+												placeholder="Apellido"
+												name="apellido"
+												id="apellido"
+												valid={errors.apellido === ""}
+												invalid={errors.apellido !== ""}
+												value={this.state.apellido}
+												onChange={
+													this.handleInputChange
+												}
+												onBlur={this.handleBlur(
+													"apellido"
+												)}
+											/>
+											<FormFeedback>
+												{errors.apellido}
+											</FormFeedback>
+										</div>
+									</FormGroup>
+									<div className="form-group row">
+										<div className="col-12">
+											<Label htmlFor="email">
+												Correo Electrónico
+											</Label>
+											<Input
+												type="email"
+												required
+												className="form-control"
+												placeholder="Correo Electrónico"
+												name="correo"
+												id="correo"
+												valid={errors.correo === ""}
+												invalid={errors.correo !== ""}
+												value={this.state.correo}
+												onChange={
+													this.handleInputChange
+												}
+												onBlur={this.handleBlur(
+													"correo"
+												)}
+											/>
+											<FormFeedback>
+												{errors.correo}
+											</FormFeedback>
+										</div>
 									</div>
-									<div className="col-md-6 col-sm-12 mb-3">
-										<label htmlFor="apellido">
-											Apellido
-										</label>
-										<Input
-											type="apellido"
-											required
-											className="form-control"
-											placeholder="Apellido"
-											name="apellido"
-											id="apellido"
-											valid={errors.apellido === ""}
-											invalid={errors.apellido !== ""}
-											value={this.state.apellido}
-											onChange={this.handleInputChange}
-											onBlur={this.handleBlur("apellido")}
-										/>
-										<FormFeedback>
-											{errors.apellido}
-										</FormFeedback>
-									</div>
-								</FormGroup>
-								<div className="form-group row">
-									<div className="col-12">
-										<Label htmlFor="email">
-											Correo Electrónico
-										</Label>
-										<Input
-											type="email"
-											required
-											className="form-control"
-											placeholder="Correo Electrónico"
-											name="correo"
-											id="correo"
-											valid={errors.correo === ""}
-											invalid={errors.correo !== ""}
-											value={this.state.correo}
-											onChange={this.handleInputChange}
-											onBlur={this.handleBlur("correo")}
-										/>
-										<FormFeedback>
-											{errors.correo}
-										</FormFeedback>
-									</div>
-								</div>
 
-								<div className="form-group row ">
-									<div className="col-12">
-										<Label htmlFor="pass">Contraseña</Label>
-										<Input
-											type="password"
-											required
-											className="form-control"
-											placeholder="Contraseña"
-											name="contraseña"
-											id="contraseña"
-											valid={errors.contraseña === ""}
-											invalid={errors.contraseña !== ""}
-											value={this.state.contraseña}
-											onChange={this.handleInputChange}
-											onBlur={this.handleBlur(
-												"contraseña"
-											)}
-										/>
-										<FormFeedback>
-											{errors.contraseña}
-										</FormFeedback>
+									<div className="form-group row ">
+										<div className="col-12">
+											<Label htmlFor="pass">
+												Contraseña
+											</Label>
+											<Input
+												type="password"
+												required
+												className="form-control"
+												placeholder="Contraseña"
+												name="contraseña"
+												id="contraseña"
+												valid={errors.contraseña === ""}
+												invalid={
+													errors.contraseña !== ""
+												}
+												value={this.state.contraseña}
+												onChange={
+													this.handleInputChange
+												}
+												onBlur={this.handleBlur(
+													"contraseña"
+												)}
+											/>
+											<FormFeedback>
+												{errors.contraseña}
+											</FormFeedback>
 
-										<small className="form-text text-muted">
-											Mínimo 8 caracteres
-										</small>
+											<small className="form-text text-muted">
+												Mínimo 8 caracteres
+											</small>
+										</div>
 									</div>
-								</div>
 
-								<div className="form-group row justify-content-center">
-									<div className="col-lg-6 col-md-10 col-sm-12 mb-3">
-										<label htmlFor="start-date">
-											Birthday:
-										</label>
-										<Input
-											type="date"
-											required
-											name="fecha"
-											id="start-date"
-											valid={errors.fecha === ""}
-											invalid={errors.fecha !== ""}
-											value={this.state.fecha}
-											onChange={this.handleInputChange}
-											onBlur={this.handleBlur("fecha")}
-										/>
-										<FormFeedback>
-											{errors.fecha}
-										</FormFeedback>
+									<div className="form-group row justify-content-center">
+										<div className="col-lg-6 col-md-10 col-sm-12 mb-3">
+											<label htmlFor="start-date">
+												Birthday:
+											</label>
+											<Input
+												type="date"
+												required
+												name="fecha"
+												id="start-date"
+												valid={errors.fecha === ""}
+												invalid={errors.fecha !== ""}
+												value={this.state.fecha}
+												onChange={
+													this.handleInputChange
+												}
+												onBlur={this.handleBlur(
+													"fecha"
+												)}
+											/>
+											<FormFeedback>
+												{errors.fecha}
+											</FormFeedback>
+										</div>
 									</div>
-								</div>
 
-								<div className="form-group row">
-									<div className="col-12 text-center">
-										<div className="row justify-content-center">
-											<div className="col-4 col-sm-9 col-md-8">
-												<Button
-													onClick={(event) =>
-														this.handleSubmitR(
-															event,
-															errors
-														)
-													}
-													className="btn-lg btn-info btn-block"
-												>
-													Enviar
-												</Button>
+									<div className="form-group row">
+										<div className="col-12 text-center">
+											<div className="row justify-content-center">
+												<div className="col-4 col-sm-9 col-md-8">
+													<Button
+														onClick={(event) =>
+															this.handleSubmitR(
+																event,
+																errors
+															)
+														}
+														className="btn-lg btn-info btn-block"
+													>
+														Enviar
+													</Button>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-							</Form>
+								</Form>
+							</div>
 						</div>
 					</div>
 				</div>
