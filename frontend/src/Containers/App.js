@@ -116,7 +116,7 @@ class App extends React.Component {
 						render={() => (
 							<MenuBar
 								addCustomList={this.addCustomList}
-								customLists={this.state.customLists}
+								customLists={this.state.customLists ? this.state.customLists : []}
 							/>
 						)}
 					/>
@@ -167,7 +167,7 @@ class App extends React.Component {
 							)}
 						/>
 
-						{this.state.customLists.map((cusList) => {
+						{this.state.customLists ? this.state.customLists.map((cusList) => {
 							if (cusList && cusList.idList && cusList.idList !== 1) {
 								return (
 									<Route
@@ -188,7 +188,7 @@ class App extends React.Component {
 								);
 							}
 							return null;
-						})}
+						}) : null}
 
 						{/* Primer Render de la app */}
 						<Route

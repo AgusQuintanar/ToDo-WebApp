@@ -48,13 +48,14 @@ export default class Login extends React.Component {
 		this.handleBlur = this.handleBlur.bind(this);
 	}
 	handleInputChange = (event) => {
+		console.log(event.target.value);
 		this.setState({ [event.target.name]: event.target.value });
 	};
 	handleSubmitIS = (event, errors) => {
 		console.log(errors);
 		const user = {
-			email: this.state.correoIS,
-			password: this.state.contraseñaIS,
+			email: this.state.correoIS.trim(),
+			password: this.state.contraseñaIS.trim(),
 		};
 
 		if (
@@ -103,10 +104,8 @@ export default class Login extends React.Component {
 						this.props.history.push("/AlphaToDo/MyDay");
 						this.props.routeChange(userId);
 					});
-				}
-				else {
+				} else {
 					this.toggleShowAlert("showSuccessAlert");
-
 				}
 			})
 
@@ -128,10 +127,8 @@ export default class Login extends React.Component {
 						this.props.history.push("/AlphaToDo/MyDay");
 						this.props.routeChange(userId);
 					});
-				}
-				else {
+				} else {
 					this.toggleShowAlert("showSuccessAlert");
-
 				}
 			})
 
@@ -142,10 +139,10 @@ export default class Login extends React.Component {
 		console.log(errors);
 
 		const newUser = {
-			firstName: this.state.nombre,
-			lastName: this.state.apellido,
-			email: this.state.correo,
-			password: this.state.contraseña,
+			firstName: this.state.nombre.trim(),
+			lastName: this.state.apellido.trim(),
+			email: this.state.correo.trim(),
+			password: this.state.contraseña.trim(),
 			birthday: this.state.fecha,
 		};
 		if (
@@ -196,76 +193,53 @@ export default class Login extends React.Component {
 		/*Validación inicio de sesión */
 
 		/*Validación inicio sesión */
-		if (this.state.touched.correoIS && correoIS.length === 0) {
+		if (this.state.touched.correoIS && correoIS.trim().length === 0) {
 			errors.correoIS = "Rellene el espacio.";
-		} else if (this.state.touched.correoIS && !correoIS.includes("@")) {
-			errors.correoIS = "Formato incorrecto de correo.";
 		} else if (
 			this.state.touched.correoIS &&
-			!(correoIS.trim().length > 0)
+			!this.validateEmail(correoIS.trim())
 		) {
-			errors.correoIS = "Formato incorrecto.";
-		}
-		if (this.state.touched.contraseñaIS && contraseñaIS.length === 0) {
-			errors.contraseñaIS = "Rellene el espacio.";
-		} else if (
-			this.state.touched.contraseñaIS &&
-			!(contraseñaIS.length >= 8)
-		) {
-			errors.contraseñaIS = "Se requiere un mínimo de caracteres.";
-		} else if (
-			this.state.touched.contraseñaIS &&
-			!(contraseñaIS.trim().length > 0)
-		) {
-			errors.contraseñaIS = "Formato incorrecto.";
-		}
+			errors.correoIS = "Correo electronico no valido.";
+		} 
+
+		if (this.state.touched.contraseñaIS && contraseñaIS.trim().length < 8) {
+			errors.contraseñaIS = "Se requiere un mínimo de 8 caracteres.";
+		} 
+		
 		/*Validación registro */
-		if (this.state.touched.nombre && nombre.length === 0) {
+		if (this.state.touched.nombre && nombre.trim().length === 0) {
 			errors.nombre = "Rellene el espacio.";
-		} else if (this.state.touched.nombre && !(nombre.length <= 20)) {
-			errors.nombre = "Caracteres insuficiente.";
-		} else if (this.state.touched.nombre && !(nombre.trim().length > 0)) {
-			errors.nombre = "Formato incorrecto.";
-		}
+		} else if (this.state.touched.nombre && nombre.trim().length > 20) {
+			errors.nombre = "Ha sobrepasado el limite de caracteres (20).";
+		} 
+		
 
-		if (this.state.touched.apellido && apellido.length === 0) {
+		if (this.state.touched.apellido && apellido.trim().length === 0) {
 			errors.apellido = "Rellene el espacio.";
-		} else if (this.state.touched.apellido && !(apellido.length <= 20)) {
-			errors.apellido = "Caracteres insuficiente.";
-		} else if (
-			this.state.touched.apellido &&
-			!(apellido.trim().length > 0)
-		) {
-			errors.apellido = "Formato incorrecto.";
-		}
+		} else if (this.state.touched.apellido && apellido.length > 20) {
+			errors.apellido = "Ha sobrepasado el limite de caracteres (20)";
+		} 
 
-		if (this.state.touched.correo && correo.length === 0) {
+		if (this.state.touched.correo && correo.trim().length === 0) {
 			errors.correo = "Rellene el espacio.";
-		} else if (this.state.touched.correo && !correo.includes("@")) {
+		} else if (this.state.touched.correo && !this.validateEmail(correo.trim())) {
 			errors.correo = "Formato incorrecto de correo.";
-		} else if (this.state.touched.correo && !(correo.trim().length > 0)) {
-			errors.correo = "Formato incorrecto.";
-		}
+		} 
 
-		if (this.state.touched.contraseña && contraseña.length === 0) {
+		if (this.state.touched.contraseña && contraseña.trim().length === 0) {
 			errors.contraseña = "Rellene el espacio.";
-		} else if (this.state.touched.contraseña && !(contraseña.length >= 8)) {
-			errors.contraseña = "Se requiere un mínimo de caracteres.";
-		} else if (
-			this.state.touched.contraseña &&
-			!(contraseña.trim().length > 0)
-		) {
-			errors.contraseña = "Formato incorrecto.";
-		}
+		} else if (this.state.touched.contraseña && contraseña.length < 8) {
+			errors.contraseña = "Se requiere un mínimo de 8 caracteres.";
+		} 
 
 		if (this.state.touched.fecha && !fecha) {
-			errors.fecha = "Se requiere rellenar los campos.";
+			errors.fecha = "Se requiere su Fecha de Nacimiento.";
 		}
 		if (this.state.touched.correoPerdido && correoPerdido.length === 0) {
 			errors.correoPerdido = "Rellene el espacio.";
 		} else if (
 			this.state.touched.correoPerdido &&
-			!correoPerdido.includes("@")
+			!this.validateEmail(correoPerdido)
 		) {
 			errors.correoPerdido = "Formato incorrecto de correo.";
 		} else if (this.state.touched.correo && !(correo.trim().length > 0)) {
@@ -279,6 +253,16 @@ export default class Login extends React.Component {
 		this.setState({
 			[alertName]: !this.state[alertName],
 		});
+	};
+
+	validateEmail = (mail) => {
+		console.log(mail);
+		var mailFormat = new RegExp(
+			/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+		);
+
+		console.log(mailFormat.test(mail));
+		return mailFormat.test(mail);
 	};
 
 	render() {
@@ -301,16 +285,16 @@ export default class Login extends React.Component {
 						severity="error"
 						onClose={() => this.toggleShowAlert("showSuccessAlert")}
 					>
-						<strong>Error!</strong> Favor de verificar que los datos ingresados sean correctos.
+						<strong>Error!</strong> Favor de verificar que los datos
+						ingresados sean correctos.
 					</Alert>
-					
 				) : null}
 				<div className="loginHeader">
 					<h1 style={{ color: "white" }}>
 						Bienvenido a Águila A-Tareada!!
-					</h1> </div>
+					</h1>{" "}
+				</div>
 				<div className="loginForms">
-					
 					<div className="row">
 						<div className="col-6">
 							<div className="row">

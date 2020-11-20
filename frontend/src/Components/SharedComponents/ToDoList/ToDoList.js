@@ -9,7 +9,7 @@ export default class ToDoList extends React.Component {
 	state = {
 		toDos: [],
 		showCompletedTasks: true,
-		tempIdTask: -1
+		tempIdTask: -1,
 	};
 
 	fetchData = () => {
@@ -19,13 +19,19 @@ export default class ToDoList extends React.Component {
 			this.props.idUser.length === 0
 		)
 			return;
+		const body =
+			this.props.idList === 1
+				? {
+						idUser: this.props.idUser,
+				  }
+				: {
+						idUser: this.props.idUser,
+						idList: this.props.idList,
+				  };
 		fetch("http://localhost:3001/getTasks", {
 			method: "post",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				idUser: this.props.idUser,
-				idList: this.props.idList,
-			}),
+			body: JSON.stringify(body),
 		})
 			.then((response) => response.json())
 			.then((response) => {
@@ -94,10 +100,9 @@ export default class ToDoList extends React.Component {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(newToDo),
 		})
-		.then((idTask) => idTask.json())
-		.then((idTask) => {
-			this.setState(
-				(state) => ({
+			.then((idTask) => idTask.json())
+			.then((idTask) => {
+				this.setState((state) => ({
 					toDos: state.toDos.map((toDo) => {
 						if (toDo.id === state.tempIdTask) {
 							// suppose to update
@@ -110,8 +115,8 @@ export default class ToDoList extends React.Component {
 						}
 					}),
 				}));
-		})
-		.catch((err) => console.log(err));
+			})
+			.catch((err) => console.log(err));
 	};
 
 	toggleAttrTaskRequest = (id, attr) => {
@@ -153,7 +158,7 @@ export default class ToDoList extends React.Component {
 		this.setState(
 			(state) => ({
 				toDos: [toDo, ...state.toDos],
-				tempIdTask: toDo.id
+				tempIdTask: toDo.id,
 			}),
 			this.addToDoRequest(toDo)
 		);
@@ -213,7 +218,6 @@ export default class ToDoList extends React.Component {
 	};
 
 	render() {
-
 		let remainingTasks = this.state.toDos
 			? this.state.toDos.filter(
 					(toDo) =>
