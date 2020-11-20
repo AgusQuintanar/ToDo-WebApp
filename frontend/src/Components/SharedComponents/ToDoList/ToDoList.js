@@ -74,8 +74,6 @@ export default class ToDoList extends React.Component {
 	};
 
 	addToDoRequest = (toDo) => {
-		console.log(toDo);
-		console.log(this.state.toDos);
 		if (!this.props.idUser || !this.props.idList || !toDo) return;
 		const newToDo = {
 			text: toDo.text,
@@ -195,9 +193,6 @@ export default class ToDoList extends React.Component {
 	};
 
 	render() {
-		console.log(
-			"idUser: " + this.props.idUser + " " + this.props.idUser.length
-		);
 
 		let remainingTasks = this.state.toDos
 			? this.state.toDos.filter(

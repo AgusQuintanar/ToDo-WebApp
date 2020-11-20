@@ -8,10 +8,12 @@ import MenuBar from "../Components/SharedComponents/MenuBar/MenuBar";
 import Login from "../Components/Login/Login";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import auth from "../Components/Login/Auth";
+import ToDoList from "../Components/SharedComponents/ToDoList/ToDoList";
 
 const initialState = {
 	signIn: auth.isAuthenticated(),
-	idUser: "",
+	idUser: 1,
+	customLists: [],
 };
 class App extends React.Component {
 	constructor(props) {
@@ -28,7 +30,60 @@ class App extends React.Component {
 
 	componentDidMount() {
 		document.title = "Alpha To Do";
+		this.getCustomLists()
 	}
+
+	getCustomLists = () => {
+		if (
+			!this.state.idUser 
+		)
+			return;
+		fetch("http://localhost:3001/getLists", {
+			method: "post",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				idUser: this.state.idUser,
+			}),
+		})
+			.then((response) => response.json())
+			.then((response) => {
+				
+				console.log(response);
+				this.setState({
+					customLists: response,
+				});
+			})
+			.catch((err) => console.log(err));
+	}
+
+	addCustomListRequest = () => {
+		if (!this.state.idUser) return;
+		const newCustomList = {
+			name: "Untitled List",
+			idUser: this.state.idUser,
+		};
+		fetch("http://localhost:3001/addList", {
+			method: "post",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(newCustomList),
+		})
+		.then((idList) => {
+			return idList
+		})
+		.catch((err) => console.log(err));
+	};
+
+	addCustomList = () => {
+		const customList = {
+			idList: this.addCustomListRequest(),
+			name: "Untitled List",
+		};
+		this.setState(
+			(state) => ({
+				customLists: [customList, ...state.customLists],
+			}),
+		);
+	};
 
 	render() {
 		return (
@@ -36,14 +91,25 @@ class App extends React.Component {
 				<Router>
 					{/* <Route path="/" render={() => <MenuBar />} /> */}
 
-					<Route path="/AlphaToDo" render={() => <MenuBar />} />
+					<Route
+						path="/AlphaToDo"
+						render={() => (
+							<MenuBar
+								addCustomList={this.addCustomList}
+								customLists={this.state.customLists}
+							/>
+						)}
+					/>
 
 					<Switch>
 						<Route
 							exact
 							path="/"
 							render={(routeProps) => (
-								<Login routeChange={this.routeChange} {...routeProps}/>
+								<Login
+									routeChange={this.routeChange}
+									{...routeProps}
+								/>
 							)}
 						/>
 
@@ -80,6 +146,29 @@ class App extends React.Component {
 								/>
 							)}
 						/>
+
+						{this.state.customLists.map((cusList) => {
+							if (cusList && cusList.idList && cusList.idList !== 1) {
+								return (
+									<Route
+										path={"/AlphaToDo/"+cusList.idList.toString()}
+										key={"cl-"+cusList.idList}
+										render={(props) => (
+											<ToDoList
+												{...props}
+												isImportant={0}
+												isMyDay={0}
+												isPlanned={0}
+												showAllTasks={1}
+												idList={cusList.idList}
+												idUser={this.state.idUser}
+											/>
+										)}
+									/>
+								);
+							}
+							return null;
+						})}
 
 						{/* Primer Render de la app */}
 						<Route

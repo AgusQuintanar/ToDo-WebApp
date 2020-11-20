@@ -19,19 +19,21 @@ export default class Tasks extends React.Component {
 					integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
 					crossOrigin="anonymous"
 				/>
-			
+
 				<div className="page-wrapper chiller-theme toggled">
-					
 					<nav id="sidebar" className="sidebar-wrapper">
 						<div className="sidebar-content">
 							<div className="sidebar-brand">
-								<a href="https://github.com/AgusQuintanar/ToDo-WebApp"> Alpha To Do </a>
-                            </div>
-                            
-                            <MenuHeader 
-                                firstName={"Agus"}
-                                lastName={"Quintanar"}
-                            />
+								<a href="https://github.com/AgusQuintanar/ToDo-WebApp">
+									{" "}
+									Alpha To Do{" "}
+								</a>
+							</div>
+
+							<MenuHeader
+								firstName={"Agus"}
+								lastName={"Quintanar"}
+							/>
 
 							<div className="sidebar-menu">
 								<ul>
@@ -42,44 +44,60 @@ export default class Tasks extends React.Component {
 									<MenuItem
 										text={"My Day"}
 										count={123}
-                                        link={"/AlphaToDo/MyDay"}
-                                        icon="fa-sun"
+										link={"/AlphaToDo/MyDay"}
+										icon="fa-sun"
 									/>
 
 									<MenuItem
 										text={"Important"}
 										count={1}
-                                        link={"/AlphaToDo/Important"}
-                                        icon="fa-star"
+										link={"/AlphaToDo/Important"}
+										icon="fa-star"
 									/>
 
 									<MenuItem
 										text={"Planned"}
 										count={1233}
-                                        link={"/AlphaToDo/Planned"}
-                                        icon="fa-calendar"
+										link={"/AlphaToDo/Planned"}
+										icon="fa-calendar"
 									/>
 
 									<MenuItem
 										text={"Tasks"}
 										count={12}
-                                        link={"/AlphaToDo/Tasks"}
-                                        icon="fa-sticky-note"
+										link={"/AlphaToDo/Tasks"}
+										icon="fa-sticky-note"
 									/>
 
 									<li className="header-menu">
 										<span> Custom Lists </span>
 									</li>
+
+									{this.props.customLists.map((cusList) => {
+										if (cusList && cusList.idList && cusList.idList !== 1) {
+											return (
+												<MenuItem
+													key={"mi-"+cusList.idList}
+													text={cusList.name}
+													count={12}
+													link={"/AlphaToDo/"+cusList.idList.toString()}
+													icon="fa-list"
+												/>
+											);
+										}
+										return null;
+									})}
 								</ul>
 							</div>
 						</div>
 						<div className="sidebar-footer">
-							<div className="newList">
+							<div
+								className="newList"
+								onClick={this.props.addCustomList}
+							>
 								<i className="fa fa-plus"></i>
-                                <span className="itemText">New List</span>
-
+								<span className="itemText">New List</span>
 							</div>
-							
 						</div>
 					</nav>
 				</div>
