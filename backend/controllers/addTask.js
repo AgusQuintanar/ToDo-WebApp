@@ -10,6 +10,7 @@ const handleAddTask = (req, res, db) => {
 		idList,
 		idUser
 	} = req.body;
+
 	db.transaction((trx) => {
 		trx.insert({
 			text: text,
@@ -23,10 +24,12 @@ const handleAddTask = (req, res, db) => {
 			idUser: idUser,
 		})
 			.into("TASK")
-			.then((response) => {
-				res.json(response);
+			.returning("idTask")
+			.then((idTask) => {
+				console.log(idTask[0]);
+				res.json(idTask[0])
 			})
-			.then(trx.commit);
+			.then(trx.commit)
 	}).catch((err) => res.status(400).json("unable to add task."));
 };
 

@@ -9,11 +9,14 @@ import Login from "../Components/Login/Login";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import auth from "../Components/Login/Auth";
 import ToDoList from "../Components/SharedComponents/ToDoList/ToDoList";
+import shortid from "shortid";
+
 
 const initialState = {
 	signIn: auth.isAuthenticated(),
 	idUser: 1,
 	customLists: [],
+	tempCustomList: -1
 };
 class App extends React.Component {
 	constructor(props) {
@@ -67,21 +70,38 @@ class App extends React.Component {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(newCustomList),
 		})
+		.then((idList) => {idList.json()})
 		.then((idList) => {
-			return idList
+			this.setState(
+				(state) => ({
+					customLists: state.customLists.map((cl) => {
+						if (cl.idList === state.tempIdList) {
+							// suppose to update
+							return {
+								...cl,
+								idList: idList,
+							};
+						} else {
+							return cl;
+						}
+					}),
+				}));
 		})
 		.catch((err) => console.log(err));
 	};
 
 	addCustomList = () => {
+		const generatedId = shortid.generate();
 		const customList = {
-			idList: this.addCustomListRequest(),
+			idList: generatedId,
 			name: "Untitled List",
 		};
 		this.setState(
 			(state) => ({
 				customLists: [customList, ...state.customLists],
+				tempCustomList: generatedId
 			}),
+			this.addCustomListRequest()
 		);
 	};
 

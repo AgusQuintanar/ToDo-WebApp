@@ -9,6 +9,7 @@ export default class ToDoList extends React.Component {
 	state = {
 		toDos: [],
 		showCompletedTasks: true,
+		tempIdTask: -1
 	};
 
 	fetchData = () => {
@@ -92,7 +93,25 @@ export default class ToDoList extends React.Component {
 			method: "post",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(newToDo),
-		}).catch((err) => console.log(err));
+		})
+		.then((idTask) => idTask.json())
+		.then((idTask) => {
+			this.setState(
+				(state) => ({
+					toDos: state.toDos.map((toDo) => {
+						if (toDo.id === state.tempIdTask) {
+							// suppose to update
+							return {
+								...toDo,
+								id: idTask,
+							};
+						} else {
+							return toDo;
+						}
+					}),
+				}));
+		})
+		.catch((err) => console.log(err));
 	};
 
 	toggleAttrTaskRequest = (id, attr) => {
@@ -134,6 +153,7 @@ export default class ToDoList extends React.Component {
 		this.setState(
 			(state) => ({
 				toDos: [toDo, ...state.toDos],
+				tempIdTask: toDo.id
 			}),
 			this.addToDoRequest(toDo)
 		);
