@@ -9,10 +9,14 @@ export default class MenuItem extends React.Component {
 				<Link to={this.props.link}>
 					<i className={"fa " + this.props.icon}></i>
 					<span className="itemText">{this.props.text}</span>
+					{/*
 					<span className="badge badge-pill badge-primary">
 						{" "}
 						{this.props.count}{" "}
 					</span>
+					
+					*/}
+					
 				</Link>
 			</li>
 		);

@@ -35,6 +35,7 @@ export default class ToDoList extends React.Component {
 		})
 			.then((response) => response.json())
 			.then((response) => {
+				if (!response) return;
 				let parsedResponse = [];
 				response.forEach((element) => {
 					let tempR = {
@@ -142,6 +143,36 @@ export default class ToDoList extends React.Component {
 			})
 
 			.catch((err) => console.log(err));
+	};
+
+	modifyToDoRequest = (newToDo) => {
+		if (newToDo) {
+			fetch("http://localhost:3001/updateTask", {
+				method: "put",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					...newToDo,
+					idTask: newToDo.id,
+					datePlanned: this.getFormattedDate(newToDo.datePlanned)
+				}),
+			}).catch((err) => console.log(err));
+		}
+	};
+
+	modifyToDo = (newToDo) => {
+		this.setState(
+			(state) => ({
+				toDos: state.toDos.map((toDo) => {
+					if (toDo.id === newToDo.id) {
+						console.log("match ", toDo, newToDo);
+						return newToDo;
+					} else {
+						return toDo;
+					}
+				}),
+			}),
+			this.modifyToDoRequest(newToDo)
+		);
 	};
 
 	handleDeleteToDoRequest = (id) => {
@@ -289,6 +320,7 @@ export default class ToDoList extends React.Component {
 											this.handleDeleteToDo(toDo.id)
 										}
 										toDo={toDo}
+										modifyToDo={this.modifyToDo}
 									/>
 								);
 							}
@@ -317,6 +349,7 @@ export default class ToDoList extends React.Component {
 											this.handleDeleteToDo(toDo.id)
 										}
 										toDo={toDo}
+										modifyToDo={this.modifyToDo}
 									/>
 								))}
 							</div>

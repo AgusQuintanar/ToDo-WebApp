@@ -300,7 +300,7 @@ export default class Login extends React.Component {
 							<div className="row">
 								<div className="col-12">
 									<div className="jumbotron mt-3">
-										<h2>Inicia Sesión</h2>
+										<h2>Iniciar Sesión</h2>
 										<Form>
 											<FormGroup className="row">
 												<div className="col-12">
@@ -396,7 +396,7 @@ export default class Login extends React.Component {
 																}
 																className="btn-lg btn-info btn-block"
 															>
-																Enviar
+																Ingresar
 															</Button>
 														</div>
 													</div>
@@ -412,7 +412,7 @@ export default class Login extends React.Component {
 								<h1>Registrate</h1>
 								<Form>
 									<h5 className="text-muted">
-										Crea una cuenta. Es grátis y solo toma
+										Crea una cuenta. Es gratis y solo toma
 										un minuto
 									</h5>
 									<FormGroup className="row">
@@ -568,7 +568,7 @@ export default class Login extends React.Component {
 														}
 														className="btn-lg btn-info btn-block"
 													>
-														Enviar
+														Regístrarse
 													</Button>
 												</div>
 											</div>

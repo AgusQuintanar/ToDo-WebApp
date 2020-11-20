@@ -1,17 +1,35 @@
 import React from "react";
 import "../Styles/Checkbox.css";
 import "../Styles/Task.css";
+import ModalTask from "./ModalTask";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default class Task extends React.Component {
+	state = {
+		showModal: false,
+	};
+
+	setShowModal(bool) {
+		this.setState({ showModal: bool });
+	}
+
 	render() {
 		return (
 			<div className="Task">
+				<ModalTask
+					show={this.state.showModal}
+					onHide={() => this.setShowModal(false)}
+					toDo={this.props.toDo}
+					modifyToDo={this.props.modifyToDo}
+				/>
 				<div
-					className="TaskWrapper"
+					className="TaskWrapper noselect"
+					onDoubleClick={() => this.setShowModal(true)}
 					style={{
 						textDecoration: this.props.toDo.completed
 							? "line-through"
 							: "",
+						cursor: "pointer",
 					}}
 				>
 					<div className="TaskText">

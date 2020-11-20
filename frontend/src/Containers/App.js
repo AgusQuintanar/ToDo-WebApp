@@ -167,7 +167,7 @@ class App extends React.Component {
 							)}
 						/>
 
-						{this.state.customLists ? this.state.customLists.map((cusList) => {
+						{this.state.customLists &&  this.state.customLists.length ? this.state.customLists.map((cusList) => {
 							if (cusList && cusList.idList && cusList.idList !== 1) {
 								return (
 									<Route
